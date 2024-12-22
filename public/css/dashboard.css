@@ -55,6 +55,81 @@ body {
   border-top-left-radius: 30px;
   border-bottom-left-radius: 30px;
 }
+.navigation ul li form {
+  position: relative;
+  display: flex;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+.navigation ul li form button {
+  all: unset; /* Убирает стандартные стили кнопки */
+  display: flex;
+  align-items: center;
+  width: 100%;
+  color: var(--white);
+  cursor: pointer;
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+}
+
+.navigation ul li form:hover button,
+.navigation ul li.hovered form button {
+  background-color: var(--white);
+  color: var(--blue);
+}
+
+.navigation ul li form button .icon {
+  min-width: 60px;
+  height: 60px;
+  line-height: 75px;
+  text-align: center;
+}
+
+.navigation ul li form button .icon ion-icon {
+  font-size: 1.75rem;
+}
+
+.navigation ul li form button .title {
+  padding: 0 10px;
+  height: 60px;
+  line-height: 60px;
+  text-align: start;
+  white-space: nowrap;
+}
+
+/* --------- curve outside ---------- */
+.navigation ul li form:hover button::before,
+.navigation ul li.hovered form button::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: -50px;
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+  border-radius: 50%;
+  box-shadow: 35px 35px 0 10px var(--white);
+  pointer-events: none;
+}
+
+.navigation ul li form:hover button::after,
+.navigation ul li.hovered form button::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: -50px;
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+  border-radius: 50%;
+  box-shadow: 35px -35px 0 10px var(--white);
+  pointer-events: none;
+}
+
 
 .navigation ul li:hover,
 .navigation ul li.hovered {
