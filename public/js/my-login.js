@@ -69,3 +69,5 @@ $(function() {
 		form.addClass('was-validated');
 	});
 });
+
+
