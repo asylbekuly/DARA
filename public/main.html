@@ -507,7 +507,7 @@
             newCard.className = 'kanban-card';
             newCard.setAttribute('data-id', cardId);
             newCard.dataset.additionalInfo = additionalInfo; // Сохранение описания в data-атрибуте
-
+            const formattedDate = new Date().toLocaleString();
             newCard.innerHTML = `
         <p>ФИО: ${fio}</p>
         <p>ИИН: ${iin}</p>
@@ -645,6 +645,14 @@
             toggleDropdown();
             document.getElementById('doctorInputHidden').value = name;
         }
+        document.addEventListener('click', (event) => {
+            const dropdowns = document.querySelectorAll('.dropdown-menu');
+            dropdowns.forEach((dropdown) => {
+                if (!dropdown.contains(event.target) && dropdown.style.display === 'block') {
+                    dropdown.style.display = 'none';
+                }
+            });
+        });
 
 
     </script>

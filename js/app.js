@@ -44,8 +44,17 @@ app.get('/', (req, res) => {
 app.post('/login', (req, res) => {
     console.log('POST /login сработал!');
     console.log('Данные формы:', req.body);
-    res.redirect('/main');
+    res.redirect('/dashboard');
 });
+
+app.get('/dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public', 'dashboard.html'));
+});
+
+app.post('/main', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public', 'main.html'));
+});
+
 
 // Маршрут для основной страницы
 app.get('/main', (req, res) => {
