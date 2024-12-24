@@ -125,6 +125,10 @@ app.post('/main', (req, res) => {
     res.sendFile(path.join(__dirname, '../public', 'main.html'));
 });
 
+app.post('/dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public', 'dashboard.html'));
+});
+
 
 
 app.post('/register', async (req, res) => {
