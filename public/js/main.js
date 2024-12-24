@@ -186,8 +186,18 @@ function deleteColumn(icon) {
 
 function toggleDropdown() {
   const dropdown = document.getElementById('doctorDropdown');
-  dropdown.classList.toggle('open');
+  const dropdownMenu = dropdown.querySelector('.dropdown-menu');
+
+
+  if (dropdown.classList.contains('open')) {
+    dropdown.classList.remove('open');
+    dropdownMenu.style.display = 'none';
+  } else {
+    dropdown.classList.add('open');
+    dropdownMenu.style.display = 'block';
+  }
 }
+
 
 function toggleEditDropdown() {
   const dropdownMenu = document.querySelector('#editDoctorDropdown .dropdown-menu');
@@ -207,14 +217,12 @@ function selectEditDoctor(name, imgSrc) {
 function selectDoctor(name, imgSrc) {
   const selected = document.querySelector('.dropdown-selected');
   selected.innerHTML = `<img src="${imgSrc}" alt="${name}" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;"> ${name}`;
-  toggleDropdown();
-  document.getElementById('doctorInputHidden').value = name;
+
+  // Скрыть меню
+  const dropdown = document.getElementById('doctorDropdown');
+  dropdown.classList.remove('open');
+  const dropdownMenu = dropdown.querySelector('.dropdown-menu');
+  dropdownMenu.style.display = 'none';
 }
-document.addEventListener('click', (event) => {
-  const dropdowns = document.querySelectorAll('.dropdown-menu');
-  dropdowns.forEach((dropdown) => {
-    if (!dropdown.contains(event.target) && dropdown.style.display === 'block') {
-      dropdown.style.display = 'none';
-    }
-  });
-});
+
+

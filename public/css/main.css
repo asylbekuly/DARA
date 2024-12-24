@@ -256,16 +256,15 @@ select:focus {
 }
 
 .dropdown-menu {
+  display: none;
   position: absolute;
+  top: 100%;
+  left: 0;
   width: 100%;
   background-color: #ffffff;
   border: 1px solid #d1d5db;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  margin-top: 5px;
-  display: none;
-  list-style: none;
-  padding: 0;
   z-index: 10;
 }
 
@@ -371,14 +370,14 @@ select:focus {
 
 .header-controls {
   display: flex;
-  justify-content: flex-start; 
-  gap: 10px; 
+  justify-content: flex-start;
+  gap: 10px;
   padding: 10px 20px;
-  background-color: #2c3e50; 
+  background-color: #2c3e50;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   position: sticky;
-  top: 0; 
-  z-index: 100; 
+  top: 0;
+  z-index: 100;
 }
 
 .header-controls button {
@@ -396,24 +395,24 @@ select:focus {
   background-color: #2980b9;
 }
 
-#showInputButton{
+#showInputButton {
   margin-left: 330px;
 }
 
-#showCardPopup{
+#showCardPopup {
   background-color: #1cc88a;
   border: none;
   height: 30px;
   border-radius: 10px;
 }
 
-#showInputButton{
+#showInputButton {
   background-color: #439750;
   height: 30px;
   border: none;
   border-radius: 10px;
 }
 
-.create_add{
+.create_add {
   margin-top: 20px;
 }
