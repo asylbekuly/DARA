@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const bcrypt = require('bcrypt'); 
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken'); 
 const helmet = require('helmet'); 
 const rateLimit = require('express-rate-limit'); 
@@ -129,7 +129,17 @@ app.post('/dashboard', (req, res) => {
     res.sendFile(path.join(__dirname, '../public', 'dashboard.html'));
 });
 
+app.post('/logout', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public', 'login.html'));
+});
 
+app.post('/reset-password', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public', 'login.html'));
+});
+
+app.post('/forgot-password', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public', 'reset.html'));
+});
 
 app.post('/register', async (req, res) => {
     const { email, password } = req.body;
