@@ -6,6 +6,7 @@
 	<meta name="author" content="Kodinger">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<title>My Registration Page</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
 		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="css/my-login.css">
@@ -22,34 +23,22 @@
 					<div class="card fat">
 						<div class="card-body">
 							<h4 class="card-title">Create Account</h4>
-							<form method="POST" action="/register" class="my-login-validation" novalidate="" id="registerForm">
+							<form action="" class="login__form" id="registerForm">
 								<div class="form-group">
 									<label for="email">E-Mail Address</label>
-									<input id="email" type="email" class="form-control" name="email" required autofocus>
-									<div class="invalid-feedback">
-										Email is invalid
-									</div>
+									<input id="email" type="email" class="form-control login__input" name="email" required autofocus>
+									<i class="ri-mail-fill register__icon_email"></i>
 								</div>
 
 								<div class="form-group">
-									<label for="password">Password</label>
-									<input id="password" type="password" class="form-control" name="password" required data-eye>
-									<div class="invalid-feedback">
-										Password is required
-									</div>
-								</div>
-
-								<div class="form-group">
-									<label for="confirmPassword">Confirm Password</label>
-									<input id="confirmPassword" type="password" class="form-control" name="confirmPassword" required>
-									<div class="invalid-feedback">
-										Password confirmation is required
-									</div>
+									<label for="passwordCreate">Password</label>
+									<input id="passwordCreate" type="password" class="form-control login__input" name="password" required>
+									<i class="ri-eye-off-fill login__password register__icon_password" id="loginPasswordCreate"></i>
 								</div>
 
 								<div class="form-group m-0">
 									<button type="submit" class="btn btn-primary btn-block" id="submit">
-										<a href="/login">Register</a>
+										Register
 									</button>
 								</div>
 								<div class="mt-4 text-center">
@@ -75,7 +64,7 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
 		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
 		crossorigin="anonymous"></script>
-	<script src="js/my-login.js"></script>
+	<script src="js/register.js"></script>
 </body>
 
 </html>

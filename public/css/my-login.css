@@ -1,4 +1,5 @@
-html,body {
+html,
+body {
 	height: 100%;
 }
 
@@ -13,7 +14,7 @@ body.my-login-page {
 	overflow: hidden;
 	border-radius: 50%;
 	margin: 40px auto;
-	box-shadow: 0 4px 8px rgba(0,0,0,.05);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, .05);
 	position: relative;
 	z-index: 1;
 }
@@ -28,7 +29,7 @@ body.my-login-page {
 
 .my-login-page .card {
 	border-color: transparent;
-	box-shadow: 0 4px 8px rgba(0,0,0,.05);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, .05);
 }
 
 .my-login-page .card.fat {
@@ -72,4 +73,60 @@ body.my-login-page {
 	.my-login-page .card.fat .card-body {
 		padding: 15px;
 	}
+}
+
+
+.login__input {
+	background: none;
+	width: 100%;
+	padding: 1.5rem 2.5rem 1.5rem 1.25rem;
+	font-weight: var(--font-semi-bold);
+	border-radius: 1rem;
+	z-index: 1;
+	transition: border-color .4s;
+}
+
+.login__input:autofill {
+	transition: background-color 6000s, color 6000s;
+}
+
+.login__icon {
+	position: absolute;
+	right: 50px;
+	top: 225px;
+	font-size: 1.25rem;
+	transition: color .4s;
+}
+
+.login__password {
+	cursor: pointer;
+	z-index: 10;
+}
+
+.login__icon_email{
+	top: 130px;
+}
+
+.register__icon_email{
+	position: absolute;
+	right: 50px;
+	top: 130px;
+	font-size: 1.25rem;
+	transition: color .4s;
+}
+
+.register__icon_password{
+	position: absolute;
+	right: 50px;
+	top: 225px;
+	font-size: 1.25rem;
+	transition: color .4s;
+}
+
+.register__icon_password2{
+	position: absolute;
+	right: 50px;
+	top: 320px;
+	font-size: 1.25rem;
+	transition: color .4s;
 }
