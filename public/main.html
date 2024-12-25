@@ -141,20 +141,21 @@
         <div class="dropdown" id="doctorDropdown">
             <div class="dropdown-selected" onclick="toggleDropdown()">Select a doctor</div>
             <ul class="dropdown-menu">
-                <li onclick="selectDoctor('Dr. Smith', 'img/customer01.jpg')">
-                    <img src="/img/customer01.jpg" alt="Dr. Smith"> Dr. Smith
-                </li>
-                <li onclick="selectDoctor('Dr. Johnson', 'img/customer01.jpg')">
-                    <img src="/img/customer01.jpg" alt="Dr. Johnson"> Dr. Johnson
-                </li>
-                <li onclick="selectDoctor('Dr. Taylor', 'img/customer01.jpg')">
-                    <img src="/img/customer01.jpg" alt="Dr. Taylor"> Dr. Taylor
-                </li>
-                <li onclick="selectDoctor('Dr. Brown', 'img/customer01.jpg')">
-                    <img src="/img/customer01.jpg" alt="Dr. Brown"> Dr. Brown
-                </li>
+              <li onclick="selectDoctor('Dr. Smith', 'img/customer01.jpg')">
+                <img src="img/customer01.jpg" alt="Dr. Smith"> Dr. Smith
+              </li>
+              <li onclick="selectDoctor('Dr. Johnson', 'img/customer02.jpg')">
+                <img src="img/customer02.jpg" alt="Dr. Johnson"> Dr. Johnson
+              </li>
+              <li onclick="selectDoctor('Dr. Taylor', 'img/customer01.jpg')">
+                <img src="img/customer01.jpg" alt="Dr. Taylor"> Dr. Taylor
+              </li>
+              <li onclick="selectDoctor('Dr. Brown', 'img/customer02.jpg')">
+                <img src="img/customer02.jpg" alt="Dr. Brown"> Dr. Brown
+              </li>
             </ul>
-        </div>
+          </div>
+          
         <input type="hidden" id="doctorInputHidden" name="doctor">
         <input type="date" id="dateInput">
         <textarea id="additionalInfoInput" placeholder="Enter additional information"></textarea>
@@ -162,7 +163,7 @@
         <button class="close-btn" id="closePopupButton">Cancel</button>
     </div>
 
-    
+    <script src="js/main.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
     <script src="assets/js/chartsJS.js"></script>
@@ -170,7 +171,7 @@
     <!-- ====== ionicons ======= -->
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-    <script src="js/main.js"></script>
+   
 </body>
 
 </html>

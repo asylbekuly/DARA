@@ -8,6 +8,8 @@ require('dotenv').config();
 const authRoutes = require('./routes/auth');
 const auth = require('./middleware/auth');
 
+
+
 const app = express();
 
 // Security Middleware

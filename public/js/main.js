@@ -114,17 +114,17 @@ function editCard(cardId) {
         ${doctor ? `<img src="img/${doctor.toLowerCase().replace(' ', '')}.jpg" alt="${doctor}" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;"> ${doctor}` : "Select a doctor"}
       </div>
       <ul class="dropdown-menu">
-        <li onclick="selectEditDoctor('Dr. Smith', 'img/doctor1.jpg')">
-          <img src="img/doctor1.jpg" alt="Dr. Smith"> Dr. Smith
+        <li onclick="selectEditDoctor('Dr. Smith', 'img/customer01.jpg')">
+          <img src="img/customer01.jpg" alt="Dr. Smith"> Dr. Smith
         </li>
-        <li onclick="selectEditDoctor('Dr. Johnson', 'img/doctor2.jpg')">
-          <img src="img/doctor2.jpg" alt="Dr. Johnson"> Dr. Johnson
+        <li onclick="selectEditDoctor('Dr. Johnson', 'img/customer02.jpg')">
+          <img src="img/customer02.jpg" alt="Dr. Johnson"> Dr. Johnson
         </li>
-        <li onclick="selectEditDoctor('Dr. Taylor', 'img/doctor3.jpg')">
-          <img src="img/doctor3.jpg" alt="Dr. Taylor"> Dr. Taylor
+        <li onclick="selectEditDoctor('Dr. Taylor', 'img/customer01.jpg')">
+          <img src="img/customer01.jpg" alt="Dr. Taylor"> Dr. Taylor
         </li>
-        <li onclick="selectEditDoctor('Dr. Brown', 'img/doctor4.jpg')">
-          <img src="img/doctor4.jpg" alt="Dr. Brown"> Dr. Brown
+        <li onclick="selectEditDoctor('Dr. Brown', 'img/customer02.jpg')">
+          <img src="img/customer02.jpg" alt="Dr. Brown"> Dr. Brown
         </li>
       </ul>
     </div>
@@ -185,6 +185,8 @@ function deleteColumn(icon) {
 }
 
 function toggleDropdown() {
+  console.log("toggleDropdown called");
+
   const dropdown = document.getElementById('doctorDropdown');
   const dropdownMenu = dropdown.querySelector('.dropdown-menu');
 
@@ -217,12 +219,17 @@ function selectEditDoctor(name, imgSrc) {
 function selectDoctor(name, imgSrc) {
   const selected = document.querySelector('.dropdown-selected');
   selected.innerHTML = `<img src="${imgSrc}" alt="${name}" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;"> ${name}`;
+  
+  // Устанавливаем значение в скрытое поле
+  const hiddenInput = document.getElementById('doctorInputHidden');
+  hiddenInput.value = name;
 
-  // Скрыть меню
+  // Закрываем меню
   const dropdown = document.getElementById('doctorDropdown');
   dropdown.classList.remove('open');
   const dropdownMenu = dropdown.querySelector('.dropdown-menu');
   dropdownMenu.style.display = 'none';
 }
+
 
 
