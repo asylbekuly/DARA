@@ -1,36 +1,4 @@
-let columnId = 1;
-
-// Показать поле ввода при нажатии кнопки "Create Section"
-document.getElementById('showInputButton').addEventListener('click', () => {
-  const inputGroup = document.getElementById('sectionInputGroup');
-  inputGroup.style.display = inputGroup.style.display === 'flex' ? 'none' : 'flex';
-});
-
-// Добавление разделов
-document.getElementById('addColumnButton').addEventListener('click', () => {
-  const sectionNameInput = document.getElementById('sectionNameInput');
-  const columnName = sectionNameInput.value.trim();
-  if (!columnName) {
-    alert("Please enter a section name.");
-    return;
-  }
-
-  const newColumn = document.createElement('div');
-  newColumn.className = 'kanban-column';
-  newColumn.setAttribute('id', `column-${columnId}`);
-  columnId++;
-  newColumn.innerHTML = `
-                <h3>
-                    ${columnName}
-                    <img src="https://cdn-icons-png.flaticon.com/512/1828/1828843.png" alt="Delete" onclick="deleteColumn(this)">
-                </h3>
-                <div class="kanban-cards"></div>
-            `;
-
-  document.getElementById('kanbanBoard').appendChild(newColumn);
-  sectionNameInput.value = ''; // Очистить поле ввода
-  document.getElementById('sectionInputGroup').style.display = 'none'; // Скрыть поле ввода
-});
+const API_BASE_URL = 'http://localhost:3000';
 
 // Показать popup для добавления карточек
 document.getElementById('showCardPopup').addEventListener('click', () => {
@@ -44,192 +12,329 @@ document.getElementById('closePopupButton').addEventListener('click', () => {
   popup.style.display = 'none';
 });
 
-let cardIdCounter = 0;
-
-document.getElementById('addCardButton').addEventListener('click', () => {
-  const fio = document.getElementById('fioInput').value.trim();
-  const iin = document.getElementById('iinInput').value.trim();
-  const doctor = document.getElementById('doctorInputHidden').value.trim();
-  const date = document.getElementById('dateInput').value;
-  const additionalInfo = document.getElementById('additionalInfoInput').value.trim();
-
-  if (!fio || !iin || !doctor || !date) {
-    alert("All fields except additional information are required!");
+let allCards = [];
+let isLoading = false;
+let initialized = false;
+document.addEventListener('DOMContentLoaded', () => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    window.location.href = './login';
     return;
   }
 
-  const column = document.querySelector('.kanban-column');
-  if (!column) {
-    alert("Please create a section before adding cards.");
-    return;
-  }
+  $(document).ready(() => {
+    initializeAdminPanel();
+  });
 
-  const cardId = `card-${cardIdCounter++}`; // Уникальный идентификатор карточки
-
-  const newCard = document.createElement('div');
-  newCard.className = 'kanban-card';
-  newCard.setAttribute('data-id', cardId);
-  newCard.dataset.additionalInfo = additionalInfo; // Сохранение описания в data-атрибуте
-  const formattedDate = new Date().toLocaleString();
-  newCard.innerHTML = `
-        <p>ФИО: ${fio}</p>
-        <p>ИИН: ${iin}</p>
-        <p>Доктор: ${doctor}</p>
-        <p>Дата приема: ${new Date(date).toLocaleString()}</p>
-        <button class="edit-btn" onclick="editCard('${cardId}')">Edit</button>
-        <button class="delete-btn" onclick="deleteCard(this)">Delete</button>
-    `;
-
-  column.querySelector('.kanban-cards').appendChild(newCard);
-
-  // Очистка полей и закрытие popup
-  document.getElementById('fioInput').value = '';
-  document.getElementById('iinInput').value = '';
-  document.getElementById('doctorInputHidden').value = '';
-  document.querySelector('.dropdown-selected').innerHTML = 'Select a doctor';
-  document.getElementById('dateInput').value = '';
-  document.getElementById('additionalInfoInput').value = '';
-  document.getElementById('cardPopup').style.display = 'none';
+  $('.selectpicker').selectpicker({
+    actionsBox: true,
+    liveSearch: true,
+    selectedTextFormat: 'count > 2'
+  });
 });
 
-function editCard(cardId) {
-  const card = document.querySelector(`.kanban-card[data-id="${cardId}"]`);
-  const fio = card.querySelector('p:nth-child(1)').textContent.replace('ФИО: ', '');
-  const iin = card.querySelector('p:nth-child(2)').textContent.replace('ИИН: ', '');
-  const doctor = card.querySelector('p:nth-child(3)').textContent.replace('Доктор: ', '');
-  const date = new Date().toISOString().slice(0, 16); // Текущее время
-  const additionalInfo = card.dataset.additionalInfo || '';
-
-  const popup = document.createElement('div');
-  popup.className = 'popup';
-  popup.style.display = 'flex';
-  popup.innerHTML = `
-    <label for="editFio">ФИО:</label>
-    <input type="text" id="editFio" value="${fio}">
-    <label for="editIin">ИИН:</label>
-    <input type="text" id="editIin" value="${iin}">
-    <label for="editDoctor">Доктор:</label>
-    <div class="dropdown" id="editDoctorDropdown">
-      <div class="dropdown-selected" onclick="toggleEditDropdown()">
-        ${doctor ? `<img src="img/${doctor.toLowerCase().replace(' ', '')}.jpg" alt="${doctor}" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;"> ${doctor}` : "Select a doctor"}
-      </div>
-      <ul class="dropdown-menu">
-        <li onclick="selectEditDoctor('Dr. Smith', 'img/customer01.jpg')">
-          <img src="img/customer01.jpg" alt="Dr. Smith"> Dr. Smith
-        </li>
-        <li onclick="selectEditDoctor('Dr. Johnson', 'img/customer02.jpg')">
-          <img src="img/customer02.jpg" alt="Dr. Johnson"> Dr. Johnson
-        </li>
-        <li onclick="selectEditDoctor('Dr. Taylor', 'img/customer01.jpg')">
-          <img src="img/customer01.jpg" alt="Dr. Taylor"> Dr. Taylor
-        </li>
-        <li onclick="selectEditDoctor('Dr. Brown', 'img/customer02.jpg')">
-          <img src="img/customer02.jpg" alt="Dr. Brown"> Dr. Brown
-        </li>
-      </ul>
-    </div>
-    <label for="editDate">Дата приема:</label>
-    <input type="datetime-local" id="editDate" value="${new Date(date).toISOString().slice(0, 16)}">
-    <label for="editAdditionalInfo">Описание:</label>
-    <textarea id="editAdditionalInfo">${additionalInfo}</textarea>
-    <button onclick="saveEdit('${cardId}', this)">Save</button>
-    <button onclick="closePopup(this)">Cancel</button>
-  `;
-
-  document.body.appendChild(popup);
+// Initialize admin panel
+async function initializeAdminPanel() {
+  try {
+    await loadCards();
+    await loadCardsTable();
+    initializeEventListeners();
+  } catch (error) {
+    console.error('Failed to initialize admin panel:', error);
+    alert('Failed to load admin panel. Please refresh the page.');
+  }
 }
 
+// Initialize event listeners
+function initializeEventListeners() {
+  const createCardForm = document.querySelector('.createCardForm');
+  if (createCardForm) {
+    createCardForm.addEventListener('submit', handleCardSubmit);
+  }
 
+  const logoutBtn = document.querySelector('.logout');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', handleLogout);
+  }
+}
 
+// Handle course submission
+async function handleCardSubmit(e) {
+  e.preventDefault();
+  if (isLoading) return;
 
-function saveEdit(cardId, button) {
-  const popup = button.parentElement;
-  const fio = popup.querySelector('#editFio').value.trim();
-  const iin = popup.querySelector('#editIin').value.trim();
-  const doctor = document.querySelector('#editDoctorDropdown .dropdown-selected').textContent.trim();
-  const date = popup.querySelector('#editDate').value;
-  const additionalInfo = popup.querySelector('#editAdditionalInfo').value.trim();
+  const fullNameInput = document.getElementById('fioInput')
+  const patientIdInput = document.getElementById('iinInput')
+  const doctorInput = document.getElementById('doctorInput')
+  const appointmentDateInput = document.getElementById('dateInput')
+  const additionalInfoInput = document.getElementById('additionalInfoInput')
 
-  const card = document.querySelector(`.kanban-card[data-id="${cardId}"]`);
-
-  if (!fio || !iin || !doctor || !date) {
-    alert("All fields except additional information are required!");
+  if (!fullNameInput || !patientIdInput || !doctorInput || !appointmentDateInput) {
+    alert('Form inputs not found');
     return;
   }
 
-  // Обновление данных карточки
-  card.querySelector('p:nth-child(1)').textContent = `ФИО: ${fio}`;
-  card.querySelector('p:nth-child(2)').textContent = `ИИН: ${iin}`;
-  card.querySelector('p:nth-child(3)').textContent = `Доктор: ${doctor}`;
-  card.querySelector('p:nth-child(4)').textContent = `Дата приема: ${new Date(date).toLocaleString()}`;
-  card.dataset.additionalInfo = additionalInfo;
+  const fullName = fullNameInput.value.trim();
+  const patient_id = patientIdInput.value.trim();
+  const doctor = doctorInput.value.trim();
+  const appoinment_date = appointmentDateInput.value.trim();
+  const add_info = additionalInfoInput.value.trim();
 
-  closePopup(button); // Закрытие popup
-}
+  if (!fullName || !patient_id || !doctor || !appoinment_date) {
+    alert('All fields except additional information are required!');
+    return;
+  }
 
+  isLoading = true;
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/main/cards`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-auth-token': localStorage.getItem('token')
+      },
+      body: JSON.stringify({ fullName, patient_id, doctor, appoinment_date, add_info })
+    });
 
-
-function closePopup(button) {
-  const popup = button.parentElement;
-  popup.remove();
-}
-
-
-function deleteCard(button) {
-  button.parentElement.remove();
-}
-
-function deleteColumn(icon) {
-  const column = icon.closest('.kanban-column');
-  column.remove();
-}
-
-function toggleDropdown() {
-  console.log("toggleDropdown called");
-
-  const dropdown = document.getElementById('doctorDropdown');
-  const dropdownMenu = dropdown.querySelector('.dropdown-menu');
-
-
-  if (dropdown.classList.contains('open')) {
-    dropdown.classList.remove('open');
-    dropdownMenu.style.display = 'none';
-  } else {
-    dropdown.classList.add('open');
-    dropdownMenu.style.display = 'block';
+    const data = await response.json();
+    if (data.success) {
+      e.target.reset();
+      await Promise.all([
+        loadCardsTable(),
+        loadCards()
+      ]);
+    } else {
+      alert(data.message || 'Failed to create card');
+    }
+  } catch (error) {
+    console.error('Error creating card:', error);
+    alert('Failed to create card. Please try again.');
+  } finally {
+    isLoading = false;
   }
 }
 
-
-function toggleEditDropdown() {
-  const dropdownMenu = document.querySelector('#editDoctorDropdown .dropdown-menu');
-  dropdownMenu.classList.toggle('open');
+// Handle logout
+function handleLogout(e) {
+  e.preventDefault();
+  localStorage.removeItem('token');
+  window.location.href = './login';
 }
 
-function selectEditDoctor(name, imgSrc) {
-  const selected = document.querySelector('#editDoctorDropdown .dropdown-selected');
-  selected.innerHTML = `<img src="${imgSrc}" alt="${name}" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;"> ${name}`;
-  document.getElementById('editDoctorDropdown').dataset.selectedDoctor = name; // Сохраняем выбранного врача
-  toggleEditDropdown();
+// Error handler wrapper
+function errorHandler(fn) {
+  return async (...args) => {
+    try {
+      await fn(...args);
+    } catch (error) {
+      console.error(`Error in ${fn.name}:`, error);
+      alert(`An error occurred in ${fn.name}. Please try again.`);
+    }
+  };
 }
 
+// Wrap existing functions with error handler
+const safeLoadCards = errorHandler(loadCards);
+const safeLoadCardsTable = errorHandler(loadCardsTable);
 
+// Add course management functions
+async function createCard(fullName, patient_id, doctor, appoinment_date, add_info) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/main/cards`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-auth-token': localStorage.getItem('token')
+      },
+      body: JSON.stringify({ fullName, patient_id, doctor, appoinment_date, add_info })
+    });
 
-
-function selectDoctor(name, imgSrc) {
-  const selected = document.querySelector('.dropdown-selected');
-  selected.innerHTML = `<img src="${imgSrc}" alt="${name}" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;"> ${name}`;
-  
-  // Устанавливаем значение в скрытое поле
-  const hiddenInput = document.getElementById('doctorInputHidden');
-  hiddenInput.value = name;
-
-  // Закрываем меню
-  const dropdown = document.getElementById('doctorDropdown');
-  dropdown.classList.remove('open');
-  const dropdownMenu = dropdown.querySelector('.dropdown-menu');
-  dropdownMenu.style.display = 'none';
+    const data = await response.json();
+    if (data.success) {
+      alert('Course created successfully');
+      loadCardsTable();
+      loadCards();
+    } else {
+      alert(data.message || 'Failed to create card');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Failed to create card');
+  }
 }
 
+// Function to fetch all courses
+async function loadCards() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/main/cards`, {
+      headers: {
+        'x-auth-token': localStorage.getItem('token')
+      }
+    });
 
+    const data = await response.json();
+
+    if (data.success) {
+      allCards = data.cards; // Store fetched cards
+      console.log('Cards loaded:', allCards);
+    } else {
+      alert(`Error: ${data.message}`);
+      console.error('Failed to load cards:', data.message);
+    }
+  } catch (error) {
+    console.error('Error fetching cards:', error);
+    alert('An unexpected error occurred while fetching cards.');
+  }
+}
+
+// Update loadCoursesTable function
+async function loadCardsTable() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/main/cards`, {
+      headers: {
+        'x-auth-token': localStorage.getItem('token')
+      }
+    });
+
+    const data = await response.json();
+    if (data.success) {
+      const cardsTableBody = document.getElementById('waiting');
+      cardsTableBody.innerHTML = '';
+
+      data.cards.forEach(card => {
+        const newCard = document.createElement('div');
+        newCard.setAttribute('draggable', 'true');
+        newCard.classList.add('kanban-card');
+
+        newCard.innerHTML = `
+                  <p>Full Name: ${sanitizeHTML(card.fullName)}</p>
+                  <p>Patient ID: ${sanitizeHTML(card.patient_id)}</p>
+                  <p>Doctor: ${sanitizeHTML(card.doctor)}</p>
+                  <p>Appointment Date: ${formatDate(card.appoinment_date)}</p>
+                  <button class="btn btn-sm btn-warning edit-btn">Edit</button>
+                  <button class="btn btn-sm btn-danger delete-btn">Delete</button>
+              `;
+
+        cardsTableBody.appendChild(newCard);
+
+        // Initialize tooltip
+        const edt = newCard.querySelector('.edit-btn');
+        const delBtn = newCard.querySelector('.delete-btn');
+
+        edt.addEventListener('click', () => {
+          editCard(card._id);
+        });
+
+        delBtn.addEventListener('click', () => {
+          deleteCard(card._id)
+        });
+      });
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Failed to load cards');
+  }
+};
+
+// Add course management functions
+async function editCard(cardId) {
+  const card = allCards.find(c => c._id === cardId);
+  if (!card) return;
+
+  const newFullName = prompt('Enter new full name:', card.fullName);
+  const newPatientId = prompt('Enter new ID:', card.patient_id);
+  const newDoctor = prompt('Enter new doctor(Dr. Smith, Dr. Johnson, Dr. Taylor, Dr. Brown):', card.doctor);
+  const newAppointmentDate = prompt('Enter new date:', card.appoinment_date);
+  const newAddInfo = prompt('Enter new additional info:', card.add_info);
+
+  if (!newFullName) return;
+  if (!newPatientId) return;
+  if (!newDoctor) return;
+  if (!newAppointmentDate) return;
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/main/cards/${cardId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-auth-token': localStorage.getItem('token')
+      },
+      body: JSON.stringify({
+        fullName: newFullName,
+        patient_id: newPatientId,
+        doctor: newDoctor,
+        appoinment_date: newAppointmentDate,
+        add_info: newAddInfo,
+      })
+    });
+
+    const data = await response.json();
+    if (data.success) {
+      alert('Card updated successfully');
+      loadCardsTable();
+      loadCards();
+    } else {
+      alert(data.message || 'Failed to update card');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Failed to update card');
+  }
+}
+
+// Delete cards
+async function deleteCard(cardId) {
+  if (!confirm('Are you sure you want to delete this card?')) return;
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/main/cards/${cardId}`, {
+      method: 'DELETE',
+      headers: {
+        'x-auth-token': localStorage.getItem('token')
+      }
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      alert('card deleted successfully');
+      loadCardsTable();
+    } else {
+      alert(`Error: ${data.message}`);
+    }
+  } catch (error) {
+    console.error('Error deleting card:', error);
+    alert('An unexpected error occurred while deleting the card.');
+  }
+}
+
+// Function to logout
+function logout() {
+  localStorage.removeItem('token');
+  window.location.href = './login';
+}
+
+// Format date
+function formatDate(dateStr) {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}
+
+// Updated sanitizeHTML function
+function sanitizeHTML(str) {
+  if (!str) return '';
+  return str.toString().replace(/[&<>'"]/g, tag => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    "'": '&#39;',
+    '"': '&quot;'
+  }[tag]));
+}
 

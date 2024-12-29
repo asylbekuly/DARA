@@ -90,7 +90,7 @@
             </li>
 
             <li>
-                <a href="#">
+                <a href="#" class="logout">
                     <span class="icon">
                         <ion-icon name="log-out-outline"></ion-icon>
                     </span>
@@ -101,7 +101,6 @@
     </div>
 
     <div class="create_add">
-        <button id="showInputButton">Create Section</button>
         <div class="input-group" id="sectionInputGroup">
             <input type="text" id="sectionNameInput" placeholder="Enter section name">
             <button id="addColumnButton">Add</button>
@@ -113,65 +112,57 @@
 
     <div class="main-content">
         <div class="kanban-board" id="kanbanBoard">
-            <div class="kanban-column" id="column-7">
+            <div class="kanban-column" id="column-waiting">
                 <h3>
                     Waiting List
                 </h3>
-                <div class="kanban-cards"></div>
+                <div id="waiting" class="kanban-cards"></div>
             </div>
-            <div class="kanban-column" id="column-7">
+            <div class="kanban-column" id="column-control">
                 <h3>
                     Under control
                 </h3>
-                <div class="kanban-cards"></div>
+                <div id="control" class="kanban-cards"></div>
             </div>
-            <div class="kanban-column" id="column-7">
+            <div class="kanban-column" id="column-done">
                 <h3>
                     Done
                 </h3>
-                <div class="kanban-cards"></div>
+                <div id="done" class="kanban-cards"></div>
             </div>
         </div>
     </div>
 
     <!-- Popup для добавления карточек -->
-    <div class="popup" id="cardPopup">
-        <input type="text" id="fioInput" placeholder="Enter patient's full name">
-        <input type="text" id="iinInput" placeholder="Enter patient's ID">
-        <div class="dropdown" id="doctorDropdown">
-            <div class="dropdown-selected" onclick="toggleDropdown()">Select a doctor</div>
-            <ul class="dropdown-menu">
-              <li onclick="selectDoctor('Dr. Smith', 'img/customer01.jpg')">
-                <img src="img/customer01.jpg" alt="Dr. Smith"> Dr. Smith
-              </li>
-              <li onclick="selectDoctor('Dr. Johnson', 'img/customer02.jpg')">
-                <img src="img/customer02.jpg" alt="Dr. Johnson"> Dr. Johnson
-              </li>
-              <li onclick="selectDoctor('Dr. Taylor', 'img/customer01.jpg')">
-                <img src="img/customer01.jpg" alt="Dr. Taylor"> Dr. Taylor
-              </li>
-              <li onclick="selectDoctor('Dr. Brown', 'img/customer02.jpg')">
-                <img src="img/customer02.jpg" alt="Dr. Brown"> Dr. Brown
-              </li>
-            </ul>
-          </div>
-          
-        <input type="hidden" id="doctorInputHidden" name="doctor">
-        <input type="date" id="dateInput">
-        <textarea id="additionalInfoInput" placeholder="Enter additional information"></textarea>
-        <button id="addCardButton">Add Card</button>
-        <button class="close-btn" id="closePopupButton">Cancel</button>
-    </div>
+    <form action="" id="createCardForm" class="createCardForm">
+        <div class="popup" id="cardPopup">
+            <input type="text" id="fioInput" placeholder="Enter patient's full name">
+            <input type="text" id="iinInput" placeholder="Enter patient's ID">
+            <input type="text" id="doctorInput" placeholder="Enter doctor name">
+            <input type="datetime-local" id="dateInput">
+            <textarea id="additionalInfoInput" placeholder="Enter additional information"></textarea>
+            <button type="submit" id="addCardButton">Add Card</button>
+            <button class="close-btn" id="closePopupButton">Cancel</button>
+        </div>
+    </form>
+
 
     <script src="js/main.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
-    <script src="assets/js/chartsJS.js"></script>
 
     <!-- ====== ionicons ======= -->
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-   
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
+
 </body>
 
 </html>

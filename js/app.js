@@ -7,6 +7,7 @@ require('dotenv').config();
 // Import routes
 const authRoutes = require('./routes/auth');
 const auth = require('./middleware/auth');
+const cardRoutes = require('./routes/card');
 
 
 
@@ -34,6 +35,8 @@ app.options('*', cors());
 // Serve static files
 app.use(express.static(path.join(__dirname, '../public')));
 
+
+
 app.get('/register', (req, res) => {
     res.sendFile(path.join(__dirname, '../public', 'register.html'));
 });
@@ -42,21 +45,40 @@ app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, '../public', 'login.html'));
 });
 
+app.post('/main', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public', 'main.html'));
+});
+
+app.post('/dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public', 'dashboard.html'));
+});
+
+app.get('/main', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public', 'main.html'));
+});
+
 // API Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/main', cardRoutes);
 
 // Protected route middleware
-app.get('/dashboard.html', auth, (req, res) => {
+app.get('/dashboard', auth, (req, res) => {
     res.sendFile(path.join(__dirname, '../public/dashboard.html'));
 });
 
 // Redirect middleware
 app.use((req, res, next) => {
     if (req.path === '/') {
-        return res.redirect('login.html');
+        return res.redirect('login');
     }
     next();
 });
+
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => console.log(err));
+
+app.listen(process.env.PORT, () => console.log(`Server running on port ${process.env.PORT}`));
 
 // 404 handler
 // app.use((req, res) => {
@@ -66,9 +88,3 @@ app.use((req, res, next) => {
 //     }
 //     res.status(404).json({ msg: 'Not Found' });
 // });
-
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log('MongoDB connected'))
-    .catch(err => console.log(err));
-
-app.listen(process.env.PORT, () => console.log(`Server running on port ${process.env.PORT}`));
