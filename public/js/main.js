@@ -200,10 +200,15 @@ async function loadCardsTable() {
     if (data.success) {
       const cardsTableBody = document.getElementById('waiting');
       cardsTableBody.innerHTML = '';
+      const cardsTableBody2 = document.getElementById('control');
+      cardsTableBody2.innerHTML = '';
+      const cardsTableBody3 = document.getElementById('done');
+      cardsTableBody3.innerHTML = '';
 
       data.cards.forEach(card => {
         const newCard = document.createElement('div');
         newCard.setAttribute('draggable', 'true');
+        newCard.setAttribute('id', card._id);
         newCard.classList.add('kanban-card');
 
         newCard.innerHTML = `
@@ -215,7 +220,16 @@ async function loadCardsTable() {
                   <button class="btn btn-sm btn-danger delete-btn">Delete</button>
               `;
 
-        cardsTableBody.appendChild(newCard);
+        newCard.addEventListener('dragstart', handleDragStart);
+
+        if (card.status === "waiting") {
+          cardsTableBody.appendChild(newCard);
+        } else if (card.status === "control") {
+          cardsTableBody2.appendChild(newCard);
+        } else if (card.status === "done") {
+          cardsTableBody3.appendChild(newCard);
+        }
+
 
         // Initialize tooltip
         const edt = newCard.querySelector('.edit-btn');
@@ -338,3 +352,122 @@ function sanitizeHTML(str) {
   }[tag]));
 }
 
+
+// // Draggable
+// document.addEventListener('DOMContentLoaded', () => {
+//   const kanbanColumns = document.querySelectorAll('.kanban-column');
+
+//   kanbanColumns.forEach(column => {
+//     column.addEventListener('dragover', handleDragOver);
+//     column.addEventListener('drop', handleDrop);
+//   });
+
+//   document.addEventListener('dragstart', handleDragStart);
+//   document.addEventListener('dragend', handleDragEnd);
+// });
+
+// let draggedCard = null;
+
+// function handleDragStart(event) {
+//   if (event.target.classList.contains('kanban-card')) {
+//     draggedCard = event.target;
+//     event.dataTransfer.effectAllowed = 'move';
+//     setTimeout(() => draggedCard.classList.add('hidden'), 0);
+//   }
+// }
+
+// function handleDragOver(event) {
+//   event.preventDefault();
+//   event.dataTransfer.dropEffect = 'move';
+// }
+
+// function handleDrop(event) {
+//   event.preventDefault();
+//   if (draggedCard) {
+//     const column = event.currentTarget.querySelector('.kanban-cards');
+//     column.appendChild(draggedCard);
+//     draggedCard.classList.remove('hidden');
+//     draggedCard = null;
+//   }
+// }
+
+// function handleDragEnd() {
+//   if (draggedCard) {
+//     draggedCard.classList.remove('hidden');
+//     draggedCard = null;
+//   }
+// }
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const columns = document.querySelectorAll('.kanban-column'); // Все колонки
+  const cards = document.querySelectorAll('.kanban-card'); // Все карточки
+
+  // Добавление обработчиков событий для колонок
+  columns.forEach(column => {
+    column.addEventListener('dragover', handleDragOver);
+    column.addEventListener('drop', handleDrop);
+  });
+
+  // Добавление обработчиков событий для карточек
+  cards.forEach(card => {
+    card.addEventListener('dragstart', handleDragStart);
+  });
+});
+
+let draggedCard = null;
+
+// Начало перетаскивания
+function handleDragStart(e) {
+  if (!this.classList.contains('kanban-card')) return;
+  draggedCard = this; // Карточка, которую перетаскивают
+  setTimeout(() => {
+    this.style.display = 'none'; // Скрыть карточку
+  }, 0);
+}
+
+// Разрешение сброса
+function handleDragOver(e) {
+  e.preventDefault(); // Разрешить сброс
+}
+
+// Сброс карточки
+async function handleDrop(e) {
+  e.preventDefault();
+
+  // Поместить карточку в новую колонку
+  this.querySelector('.kanban-cards').appendChild(draggedCard);
+  draggedCard.style.display = 'block'; // Сделать карточку видимой снова
+
+  const cardId = draggedCard.getAttribute('id'); // Получить ID карточки
+  const newStatus = this.getAttribute('data-status'); // Новый статус из атрибута колонки
+
+  // Отправить запрос на бэкенд для обновления статуса
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/main/cards/status/${cardId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-auth-token': localStorage.getItem('token')
+      },
+      body: JSON.stringify({ newStatus })
+    });
+
+    const data = await response.json();
+    if (data.success) {
+      console.log('Card status updated successfully:', data);
+    } else {
+      console.error('Failed to update card status:', data.message);
+      alert(data.message || 'Failed to update card status');
+    }
+  } catch (error) {
+    console.error('Error updating card status:', error);
+    alert('An error occurred while updating card status.');
+  }
+
+  draggedCard = null; // Сбросить ссылку на перетаскиваемую карточку
+}

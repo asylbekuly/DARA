@@ -25,4 +25,7 @@ router.delete('/cards/:id', auth, cardController.deleteCard);
 //  Update card
 router.put('/cards/:id', auth, cardController.updateCard);
 
+//  Update Status
+router.put('/cards/status/:id', auth, cardController.updateCardStatus);
+
 module.exports = router;

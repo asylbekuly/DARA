@@ -25,6 +25,7 @@ exports.getAllCard = async (req, res) => {
             patient_id: card.patient_id,
             doctor: card.doctor,
             appoinment_date: card.appoinment_date,
+            status: card.status,
             add_info: card.add_info
         }));
 
@@ -64,6 +65,27 @@ exports.updateCard = async (req, res) => {
         card.doctor = doctor;
         card.appoinment_date = appoinment_date;
         card.add_info = add_info;
+        await card.save();
+
+        res.json({ success: true, message: 'Card updated successfully', card });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+//  Update status
+exports.updateCardStatus = async (req, res) => {
+    try {
+        const { newStatus } = req.body;
+        const cardId = req.params.id;
+
+        const card = await Card.findById(cardId);
+        if (!card) {
+            return res.status(404).json({ success: false, message: 'Card not found' });
+        }
+
+        card.status = newStatus;
+
         await card.save();
 
         res.json({ success: true, message: 'Card updated successfully', card });
