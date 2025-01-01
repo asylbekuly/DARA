@@ -21,3 +21,27 @@ toggle.onclick = function () {
 };
 
 
+document.addEventListener("DOMContentLoaded", () => {
+  function toggleMenu() {
+    const subMenu = document.getElementById("subMenu");
+    if (subMenu) {
+      subMenu.classList.toggle("open-menu");
+      console.log("Current classes:", subMenu.className); // Лог текущих классов
+    } else {
+      console.error("SubMenu not found!");
+    }
+  }
+
+  const userImg = document.querySelector(".user img");
+  if (userImg) {
+    userImg.addEventListener("click", toggleMenu);
+  }
+});
+
+
+
+
+
+
+
+
