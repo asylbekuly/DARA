@@ -353,56 +353,6 @@ function sanitizeHTML(str) {
 }
 
 
-// // Draggable
-// document.addEventListener('DOMContentLoaded', () => {
-//   const kanbanColumns = document.querySelectorAll('.kanban-column');
-
-//   kanbanColumns.forEach(column => {
-//     column.addEventListener('dragover', handleDragOver);
-//     column.addEventListener('drop', handleDrop);
-//   });
-
-//   document.addEventListener('dragstart', handleDragStart);
-//   document.addEventListener('dragend', handleDragEnd);
-// });
-
-// let draggedCard = null;
-
-// function handleDragStart(event) {
-//   if (event.target.classList.contains('kanban-card')) {
-//     draggedCard = event.target;
-//     event.dataTransfer.effectAllowed = 'move';
-//     setTimeout(() => draggedCard.classList.add('hidden'), 0);
-//   }
-// }
-
-// function handleDragOver(event) {
-//   event.preventDefault();
-//   event.dataTransfer.dropEffect = 'move';
-// }
-
-// function handleDrop(event) {
-//   event.preventDefault();
-//   if (draggedCard) {
-//     const column = event.currentTarget.querySelector('.kanban-cards');
-//     column.appendChild(draggedCard);
-//     draggedCard.classList.remove('hidden');
-//     draggedCard = null;
-//   }
-// }
-
-// function handleDragEnd() {
-//   if (draggedCard) {
-//     draggedCard.classList.remove('hidden');
-//     draggedCard = null;
-//   }
-// }
-
-
-
-
-
-
 document.addEventListener('DOMContentLoaded', () => {
   const columns = document.querySelectorAll('.kanban-column'); // Все колонки
   const cards = document.querySelectorAll('.kanban-card'); // Все карточки
