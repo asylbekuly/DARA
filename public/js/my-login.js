@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
 							console.log('Login successful', data)
 							localStorage.setItem('token', data.token)
 							if(data.who === 'admin'){
-									window.location.href = './admin.html'
+									window.location.href = './dashboard.html'
 							} 
 							else{
 									window.location.href = './dashboard.html'

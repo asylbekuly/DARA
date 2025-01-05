@@ -15,6 +15,29 @@ document.getElementById('closePopupButton').addEventListener('click', () => {
 let allCards = [];
 let isLoading = false;
 let initialized = false;
+
+function showErrorPopup(message) {
+	const popup = document.createElement('div')
+	popup.classList.add('error-popup')
+	popup.textContent = message
+	document.body.appendChild(popup)
+
+	setTimeout(() => {
+			popup.remove()
+	}, 3000)
+}
+
+function showSuccessPopup(message) {
+	const popup = document.createElement('div')
+	popup.classList.add('success-popup')
+	popup.textContent = message
+	document.body.appendChild(popup)
+
+	setTimeout(() => {
+			popup.remove()
+	}, 3000)
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const token = localStorage.getItem('token');
   if (!token) {
@@ -41,7 +64,7 @@ async function initializeAdminPanel() {
     initializeEventListeners();
   } catch (error) {
     console.error('Failed to initialize admin panel:', error);
-    alert('Failed to load admin panel. Please refresh the page.');
+    showErrorPopup('Failed to load admin panel. Please refresh the page.');
   }
 }
 
@@ -70,7 +93,7 @@ async function handleCardSubmit(e) {
   const additionalInfoInput = document.getElementById('additionalInfoInput')
 
   if (!fullNameInput || !patientIdInput || !doctorInput || !appointmentDateInput) {
-    alert('Form inputs not found');
+    showErrorPopup('Form inputs not found');
     return;
   }
 
@@ -81,7 +104,7 @@ async function handleCardSubmit(e) {
   const add_info = additionalInfoInput.value.trim();
 
   if (!fullName || !patient_id || !doctor || !appoinment_date) {
-    alert('All fields except additional information are required!');
+    showErrorPopup('All fields except additional information are required!');
     return;
   }
 
@@ -100,15 +123,16 @@ async function handleCardSubmit(e) {
     if (data.success) {
       e.target.reset();
       await Promise.all([
+        showSuccessPopup('Card created successfully!'),
         loadCardsTable(),
         loadCards()
       ]);
     } else {
-      alert(data.message || 'Failed to create card');
+      showErrorPopup(data.message || 'Failed to create card');
     }
   } catch (error) {
     console.error('Error creating card:', error);
-    alert('Failed to create card. Please try again.');
+    showErrorPopup('Failed to create card. Please try again.');
   } finally {
     isLoading = false;
   }
@@ -128,7 +152,7 @@ function errorHandler(fn) {
       await fn(...args);
     } catch (error) {
       console.error(`Error in ${fn.name}:`, error);
-      alert(`An error occurred in ${fn.name}. Please try again.`);
+      showErrorPopup(`An error occurred in ${fn.name}. Please try again.`);
     }
   };
 }
@@ -138,30 +162,30 @@ const safeLoadCards = errorHandler(loadCards);
 const safeLoadCardsTable = errorHandler(loadCardsTable);
 
 // Add course management functions
-async function createCard(fullName, patient_id, doctor, appoinment_date, add_info) {
-  try {
-    const response = await fetch(`${API_BASE_URL}/api/main/cards`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-auth-token': localStorage.getItem('token')
-      },
-      body: JSON.stringify({ fullName, patient_id, doctor, appoinment_date, add_info })
-    });
+// async function createCard(fullName, patient_id, doctor, appoinment_date, add_info) {
+//   try {
+//     const response = await fetch(`${API_BASE_URL}/api/main/cards`, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'x-auth-token': localStorage.getItem('token')
+//       },
+//       body: JSON.stringify({ fullName, patient_id, doctor, appoinment_date, add_info })
+//     });
 
-    const data = await response.json();
-    if (data.success) {
-      alert('Course created successfully');
-      loadCardsTable();
-      loadCards();
-    } else {
-      alert(data.message || 'Failed to create card');
-    }
-  } catch (error) {
-    console.error('Error:', error);
-    alert('Failed to create card');
-  }
-}
+//     const data = await response.json();
+//     if (data.success) {
+//       showSuccessPopup('Course created successfully');
+//       loadCardsTable();
+//       loadCards();
+//     } else {
+//       showErrorPopup(data.message || 'Failed to create card');
+//     }
+//   } catch (error) {
+//     console.error('Error:', error);
+//     showErrorPopup('Failed to create card');
+//   }
+// }
 
 // Function to fetch all courses
 async function loadCards() {
@@ -178,12 +202,12 @@ async function loadCards() {
       allCards = data.cards; // Store fetched cards
       console.log('Cards loaded:', allCards);
     } else {
-      alert(`Error: ${data.message}`);
+      showErrorPopup(`Error: ${data.message}`);
       console.error('Failed to load cards:', data.message);
     }
   } catch (error) {
     console.error('Error fetching cards:', error);
-    alert('An unexpected error occurred while fetching cards.');
+    showErrorPopup('An unexpected error occurred while fetching cards.');
   }
 }
 
@@ -246,7 +270,7 @@ async function loadCardsTable() {
     }
   } catch (error) {
     console.error('Error:', error);
-    alert('Failed to load cards');
+    showErrorPopup('Failed to load cards');
   }
 };
 
@@ -255,51 +279,65 @@ async function editCard(cardId) {
   const card = allCards.find(c => c._id === cardId);
   if (!card) return;
 
-  const newFullName = prompt('Enter new full name:', card.fullName);
-  const newPatientId = prompt('Enter new ID:', card.patient_id);
-  const newDoctor = prompt('Enter new doctor(Dr. Smith, Dr. Johnson, Dr. Taylor, Dr. Brown):', card.doctor);
-  const newAppointmentDate = prompt('Enter new date:', card.appoinment_date);
-  const newAddInfo = prompt('Enter new additional info:', card.add_info);
+  const popup = document.getElementById('editPopup');
+  const form = document.getElementById('editCardForm');
 
-  if (!newFullName) return;
-  if (!newPatientId) return;
-  if (!newDoctor) return;
-  if (!newAppointmentDate) return;
+  document.getElementById('editFullName').value = card.fullName;
+  document.getElementById('editPatientId').value = card.patient_id;
+  document.getElementById('editDoctor').value = card.doctor;
+  document.getElementById('editAppointmentDate').value = card.appoinment_date;
+  document.getElementById('editAdditionalInfo').value = card.add_info;
 
-  try {
-    const response = await fetch(`${API_BASE_URL}/api/main/cards/${cardId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-auth-token': localStorage.getItem('token')
-      },
-      body: JSON.stringify({
-        fullName: newFullName,
-        patient_id: newPatientId,
-        doctor: newDoctor,
-        appoinment_date: newAppointmentDate,
-        add_info: newAddInfo,
-      })
-    });
+  popup.style.display = 'flex';
 
-    const data = await response.json();
-    if (data.success) {
-      alert('Card updated successfully');
-      loadCardsTable();
-      loadCards();
-    } else {
-      alert(data.message || 'Failed to update card');
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+
+    const newFullName = document.getElementById('editFullName').value.trim();
+    const newPatientId = document.getElementById('editPatientId').value.trim();
+    const newDoctor = document.getElementById('editDoctor').value.trim();
+    const newAppointmentDate = document.getElementById('editAppointmentDate').value.trim();
+    const newAddInfo = document.getElementById('editAdditionalInfo').value.trim();
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/main/cards/${cardId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-token': localStorage.getItem('token'),
+        },
+        body: JSON.stringify({
+          fullName: newFullName,
+          patient_id: newPatientId,
+          doctor: newDoctor,
+          appoinment_date: newAppointmentDate,
+          add_info: newAddInfo,
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        showSuccessPopup('Card updated successfully');
+        popup.style.display = 'none';
+        await loadCardsTable();
+        await loadCards();
+      } else {
+        showErrorPopup(data.message || 'Failed to update card');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      showErrorPopup('Failed to update card');
     }
-  } catch (error) {
-    console.error('Error:', error);
-    alert('Failed to update card');
-  }
+  };
+
+  document.getElementById('closeEditPopup').addEventListener('click', () => {
+    popup.style.display = 'none';
+  });
 }
+
 
 // Delete cards
 async function deleteCard(cardId) {
-  if (!confirm('Are you sure you want to delete this card?')) return;
-
   try {
     const response = await fetch(`${API_BASE_URL}/api/main/cards/${cardId}`, {
       method: 'DELETE',
@@ -311,14 +349,14 @@ async function deleteCard(cardId) {
     const data = await response.json();
 
     if (data.success) {
-      alert('card deleted successfully');
+      showSuccessPopup('Card deleted successfully');
       loadCardsTable();
     } else {
-      alert(`Error: ${data.message}`);
+      showErrorPopup(`Error: ${data.message}`);
     }
   } catch (error) {
     console.error('Error deleting card:', error);
-    alert('An unexpected error occurred while deleting the card.');
+    showErrorPopup('An unexpected error occurred while deleting the card.');
   }
 }
 
@@ -412,11 +450,11 @@ async function handleDrop(e) {
       console.log('Card status updated successfully:', data);
     } else {
       console.error('Failed to update card status:', data.message);
-      alert(data.message || 'Failed to update card status');
+      showErrorPopup(data.message || 'Failed to update card status');
     }
   } catch (error) {
     console.error('Error updating card status:', error);
-    alert('An error occurred while updating card status.');
+    showErrorPopup('An error occurred while updating card status.');
   }
 
   draggedCard = null; // Сбросить ссылку на перетаскиваемую карточку

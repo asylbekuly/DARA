@@ -567,3 +567,16 @@ body {
     left: initial;
   }
 }
+
+.error-popup {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #f44336; 
+  color: white;
+  padding: 16px;
+  border-radius: 4px;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
