@@ -161,31 +161,6 @@ function errorHandler(fn) {
 const safeLoadCards = errorHandler(loadCards);
 const safeLoadCardsTable = errorHandler(loadCardsTable);
 
-// Add course management functions
-// async function createCard(fullName, patient_id, doctor, appoinment_date, add_info) {
-//   try {
-//     const response = await fetch(`${API_BASE_URL}/api/main/cards`, {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//         'x-auth-token': localStorage.getItem('token')
-//       },
-//       body: JSON.stringify({ fullName, patient_id, doctor, appoinment_date, add_info })
-//     });
-
-//     const data = await response.json();
-//     if (data.success) {
-//       showSuccessPopup('Course created successfully');
-//       loadCardsTable();
-//       loadCards();
-//     } else {
-//       showErrorPopup(data.message || 'Failed to create card');
-//     }
-//   } catch (error) {
-//     console.error('Error:', error);
-//     showErrorPopup('Failed to create card');
-//   }
-// }
 
 // Function to fetch all courses
 async function loadCards() {

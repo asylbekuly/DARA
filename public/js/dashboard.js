@@ -36,7 +36,18 @@ document.addEventListener("DOMContentLoaded", () => {
   if (userImg) {
     userImg.addEventListener("click", toggleMenu);
   }
+
+  const logoutBtn = document.querySelector('.logout');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', handleLogout);
+  }
 });
+
+function handleLogout(e) {
+  e.preventDefault();
+  localStorage.removeItem('token');
+  window.location.href = './login';
+}
 
 
 

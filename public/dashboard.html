@@ -29,7 +29,7 @@
                 <li>
                     <a href="#">
                         <span class="icon">
-                            <ion-icon name="people-outline"></ion-icon>
+                            <ion-icon name="home-outline"></ion-icon>
                         </span>
                         <span class="title">Dashboard</span>
                     </a>
@@ -39,7 +39,7 @@
                     <form action="/main" method="POST">
                         <button type="submit">
                             <span class="icon">
-                                <ion-icon name="home-outline"></ion-icon>
+                                <ion-icon name="albums-outline"></ion-icon>
                             </span>
                             <span class="title">Appointments</span>
                         </button>
@@ -47,50 +47,34 @@
                 </li>
 
                 <li>
-                    <a href="#">
-                        <span class="icon">
-                            <ion-icon name="chatbubble-outline"></ion-icon>
-                        </span>
-                        <span class="title">Messages</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="#">
-                        <span class="icon">
-                            <ion-icon name="help-outline"></ion-icon>
-                        </span>
-                        <span class="title">Help</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="#">
-                        <span class="icon">
-                            <ion-icon name="settings-outline"></ion-icon>
-                        </span>
-                        <span class="title">Settings</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="#">
-                        <span class="icon">
-                            <ion-icon name="lock-closed-outline"></ion-icon>
-                        </span>
-                        <span class="title">Password</span>
-                    </a>
-                </li>
-
-                <li>
-                    <form action="/logout" method="POST">
+                    <form action="/settings" method="post">
                         <button type="submit">
                             <span class="icon">
-                                <ion-icon name="log-out-outline"></ion-icon>
+                                <ion-icon name="settings-outline"></ion-icon>
                             </span>
-                            <span class="title">Logout</span>
+                            <span class="title">Settings</span>
                         </button>
                     </form>
+                </li>
+
+                <li>
+                    <form action="/doctor" method="post">
+                        <button type="submit">
+                            <span class="icon">
+                                <ion-icon name="accessibility-outline"></ion-icon>
+                            </span>
+                            <span class="title">Add doctor</span>
+                        </button>
+                    </form>
+                </li>
+
+                <li>
+                    <a href="#" class="logout">
+                        <span class="icon">
+                            <ion-icon name="log-out-outline"></ion-icon>
+                        </span>
+                        <span class="title">Sign Out</span>
+                    </a>
                 </li>
             </ul>
         </div>
@@ -107,34 +91,6 @@
                         <input type="text" placeholder="Search here">
                         <ion-icon name="search-outline"></ion-icon>
                     </label>
-                </div>
-
-                <div class="user">
-                    <img src="img/user.png" alt="User Image">
-                    <div class="sub-menu-wrap" id="subMenu">
-                        <div class="sub-menu">
-                            <div class="user-info">
-                                <img src="img/user.png" alt="">
-                                <h3>Rabat Karabek</h3>
-                            </div>
-                            <hr>
-                            <a href="#" class="sub-menu-link">
-                                <img src="img/profile.png" alt="">
-                                <p>Edit Profile</p>
-                                <span>></span>
-                            </a>
-                            <a href="#" class="sub-menu-link">
-                                <img src="img/setting.png" alt="">
-                                <p>Settings & Privacy</p>
-                                <span>></span>
-                            </a>
-                            <a href="#" class="sub-menu-link">
-                                <img src="img/logout.png" alt="">
-                                <p>Logout</p>
-                                <span>></span>
-                            </a>
-                        </div>
-                    </div>
                 </div>
                 
             </div>
@@ -191,7 +147,6 @@
                 <div class="recentOrders">
                     <div class="cardHeader">
                         <h2>Recent Orders</h2>
-                        <a href="#" class="btn">View All</a>
                     </div>
 
                     <table>
@@ -267,7 +222,7 @@
                 <!-- ================= New Customers ================ -->
                 <div class="recentCustomers">
                     <div class="cardHeader">
-                        <h2>Recent Customers</h2>
+                        <h2>Our doctors</h2>
                     </div>
 
                     <table>

@@ -8,7 +8,8 @@ require('dotenv').config();
 const authRoutes = require('./routes/auth');
 const auth = require('./middleware/auth');
 const cardRoutes = require('./routes/card');
-
+const settingsRoutes = require('./routes/settings');
+const doctorRoutes = require('./routes/doctor');
 
 
 const app = express();
@@ -53,6 +54,14 @@ app.post('/dashboard', (req, res) => {
     res.sendFile(path.join(__dirname, '../public', 'dashboard.html'));
 });
 
+app.post('/settings', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public', 'settings.html'));
+});
+
+app.post('/doctor', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public', 'addDoctor.html'));
+});
+
 app.get('/main', (req, res) => {
     res.sendFile(path.join(__dirname, '../public', 'main.html'));
 });
@@ -60,11 +69,8 @@ app.get('/main', (req, res) => {
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/main', cardRoutes);
-
-// Protected route middleware
-app.get('/dashboard', auth, (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/dashboard.html'));
-});
+app.use('/api/settings', settingsRoutes);
+app.use('/api/doctor', doctorRoutes);
 
 // Redirect middleware
 app.use((req, res, next) => {
@@ -74,17 +80,35 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use((req, res, next) => {
+    if (req.path.endsWith('.html')) {
+        const newPath = req.path.slice(0, -5);
+        return res.redirect(301, newPath);
+    }
+    next();
+});
+
+// app.use('/public/:page', (req, res, next) => {
+//     const page = req.params.page;
+//     const filePath = path.join(__dirname, `../public/${page}.html`);
+//     res.sendFile(filePath, err => {
+//         if (err) next();
+//     });
+// });
+
+
+// 404 handler
+app.use((req, res) => {
+    if (req.accepts('html')) {
+        res.status(404).sendFile(path.join(__dirname, '../public/404.html'));
+        return;
+    }
+    res.status(404).json({ msg: 'Not Found' });
+});
+
+
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.log(err));
 
 app.listen(process.env.PORT, () => console.log(`Server running on port ${process.env.PORT}`));
-
-// 404 handler
-// app.use((req, res) => {
-//     if (req.accepts('html')) {
-//         res.status(404).sendFile(path.join(__dirname, '../frontend/pages/404.html'));
-//         return;
-//     }
-//     res.status(404).json({ msg: 'Not Found' });
-// });
