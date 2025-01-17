@@ -6,7 +6,7 @@ const QRCode = require('qrcode');
 const Doctor = require('../models/Doctor');
 
 exports.register = async (req, res) => {
-  const { email, password, fullname, enable2FA } = req.body;
+  const { email, password, fullname, profession, enable2FA } = req.body;
   console.log('Register request received:', { email, password, fullname });
 
   try {
@@ -21,7 +21,7 @@ exports.register = async (req, res) => {
       return res.status(400).json({ msg: 'User already exists' });
     }
 
-    user = new User({ email, password, fullname });
+    user = new User({ email, password, fullname, profession });
     console.log('Creating new user:', user);
     if (enable2FA) {
       const secret = speakeasy.generateSecret({

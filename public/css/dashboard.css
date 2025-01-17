@@ -282,7 +282,7 @@ body {
   overflow: hidden;
   cursor: pointer;
   display: inline-block;
-  z-index: 10; 
+  z-index: 10;
 }
 
 .user img {
@@ -303,19 +303,24 @@ body {
   top: 100%;
   right: 0;
   width: 200px;
-  max-height: 0; /* Скрытое меню */
+  max-height: 0;
+  /* Скрытое меню */
   overflow: hidden;
   background: #fff;
   transition: max-height 0.5s ease-in-out, visibility 0.5s ease-in-out;
-  z-index: 1000; /* Увеличьте значение */
+  z-index: 1000;
+  /* Увеличьте значение */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  visibility: hidden; /* Невидимо по умолчанию */
+  visibility: hidden;
+  /* Невидимо по умолчанию */
 }
 
 .sub-menu-wrap.open-menu {
-  max-height: 400px; /* Достаточная высота */
+  max-height: 400px;
+  /* Достаточная высота */
   overflow: visible;
-  visibility: visible; /* Делаем видимым */
+  visibility: visible;
+  /* Делаем видимым */
 }
 
 
@@ -351,10 +356,10 @@ body {
 
 .sub-menu-link {
   display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: #525252;
-    margin: 12px 0;
+  align-items: center;
+  text-decoration: none;
+  color: #525252;
+  margin: 12px 0;
 }
 
 .sub-menu-link p {
@@ -532,45 +537,8 @@ body {
   text-align: center;
 }
 
-.status.delivered {
-  padding: 2px 4px;
-  background: #8de02c;
-  color: var(--white);
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.status.pending {
-  padding: 2px 4px;
-  background: #e9b10a;
-  color: var(--white);
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.status.return {
-  padding: 2px 4px;
-  background: #f00;
-  color: var(--white);
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.status.inProgress {
-  padding: 2px 4px;
-  background: #1795ce;
-  color: var(--white);
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 500;
-}
-
 .recentCustomers {
   position: relative;
-  display: grid;
   min-height: 500px;
   padding: 20px;
   background: var(--white);
@@ -703,11 +671,85 @@ body {
   position: fixed;
   top: 20px;
   right: 20px;
-  background-color: #f44336; 
+  background-color: #f44336;
   color: white;
   padding: 16px;
   border-radius: 4px;
   z-index: 1000;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+.success-popup {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #3ff436;
+  color: white;
+  padding: 16px;
+  border-radius: 4px;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+/* Стили для статусов */
+.status-waiting {
+  color: #ff4d4d;
+  /* Красный цвет */
+  font-weight: bold;
+  background-color: #ffe6e6;
+  /* Светло-красный фон */
+  border: 1px solid #ff9999;
+  border-radius: 5px;
+  padding: 3px 8px;
+  display: inline-block;
+}
+
+.status-control {
+  color: #ff9900;
+  /* Оранжевый цвет */
+  font-weight: bold;
+  background-color: #fff4e6;
+  /* Светло-оранжевый фон */
+  border: 1px solid #ffcc80;
+  border-radius: 5px;
+  padding: 3px 8px;
+  display: inline-block;
+}
+
+.status-done {
+  color: #4caf50;
+  /* Зеленый цвет */
+  font-weight: bold;
+  background-color: #e8f5e9;
+  /* Светло-зеленый фон */
+  border: 1px solid #a5d6a7;
+  border-radius: 5px;
+  padding: 3px 8px;
+  display: inline-block;
+}
+
+/* Дополнительное оформление для таблицы */
+.order_table tr:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+.order_table tr:nth-child(even) {
+  background-color: #ffffff;
+}
+
+.order_table td {
+  padding: 10px;
+  text-align: center;
+}
+
+.order_table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.order_table td span {
+  font-size: 14px;
+  text-transform: capitalize;
 }

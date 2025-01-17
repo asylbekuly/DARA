@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const email = document.getElementById('email').value
     const password = document.getElementById('passwordCreate').value
     const fullname = document.getElementById('fullname').value
+    const profession = document.getElementById('profession').value
     const enable2FA = document.getElementById('enable2FA').checked;
 
     try {
@@ -47,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email, password, fullname, enable2FA })
+        body: JSON.stringify({ email, password, fullname, profession, enable2FA })
       })
 
       const data = await response.json()

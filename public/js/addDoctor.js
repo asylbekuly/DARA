@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await response.json()
       if (response.ok) {
         showSuccessPopup('Doctor added successfully')
+        document.getElementById('emailInput').value = ' '
       } else {
         showErrorPopup(data.message)
         console.error('Not added', data.message)

@@ -10,6 +10,7 @@ const auth = require('./middleware/auth');
 const cardRoutes = require('./routes/card');
 const settingsRoutes = require('./routes/settings');
 const doctorRoutes = require('./routes/doctor');
+const dashboardRoutes = require('./routes/dashboard');
 
 
 const app = express();
@@ -71,6 +72,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/main', cardRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/doctor', doctorRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 // Redirect middleware
 app.use((req, res, next) => {

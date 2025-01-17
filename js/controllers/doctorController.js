@@ -6,7 +6,7 @@ exports.addDoctor = async (req, res) => {
     let doctor = await Doctor.findOne({ email });
     if (doctor) {
       console.log('Doctor already exists');
-      return res.status(400).json({ msg: 'Doctor already exists' });
+      return res.status(400).json({ message: 'Doctor already exists' });
     }
     doctor = new Doctor({ email });
     console.log('Adding new doctor:', doctor);
