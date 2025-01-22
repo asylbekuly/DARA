@@ -60,7 +60,7 @@
                 </form>
             </li>
 
-            <li>
+            <li id="add_doctor">
                 <form action="/doctor" method="post">
                     <button type="submit">
                         <span class="icon">
@@ -94,7 +94,7 @@
                         <a class="list-group-item list-group-item-action" data-toggle="list"
                             href="#account-change-password">Change password</a>
                         <a class="list-group-item list-group-item-action" data-toggle="list"
-                            href="#account-social-links">Social links</a>
+                            href="#account-social-links">Change firstname and lastname</a>
                     </div>
                 </div>
                 <div class="col-md-9">
@@ -144,21 +144,11 @@
                         <div class="tab-pane fade" id="account-social-links">
                             <div class="card-body pb-2">
                                 <div class="form-group">
-                                    <label class="form-label">Twitter</label>
-                                    <input type="text" class="form-control" value="https://twitter.com/user">
+                                    <label class="form-label">Name and Surname</label>
+                                    <input type="text" id="fullname_change" class="form-control">
                                 </div>
-                                <div class="form-group">
-                                    <label class="form-label">Facebook</label>
-                                    <input type="text" class="form-control" value="https://www.facebook.com/user">
                                 </div>
-                                <div class="form-group">
-                                    <label class="form-label">Telegram</label>
-                                    <input type="text" class="form-control" value>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Instagram</label>
-                                    <input type="text" class="form-control" value="https://www.instagram.com/user">
-                                </div>
+                                <button type="button" class="btn-outline-primary" id="changeFullname">Change</button>
                             </div>
                         </div>
                     </div>

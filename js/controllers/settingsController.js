@@ -53,3 +53,22 @@ exports.changePass = async (req, res) => {
   }
 }
 
+exports.changeFullname = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    user.fullname = req.body.newFullname;
+    await user.save();
+    res.json({ message: 'Name changed successfully' });
+  } catch (error) {
+    console.error('Error changing name:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error',
+      error: error.message
+    });
+  }
+}

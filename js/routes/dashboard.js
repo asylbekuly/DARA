@@ -7,4 +7,6 @@ router.get('/cards', auth, dashboardController.getAllCard);
 
 router.get('/doctors', auth, dashboardController.getAllDoctor);
 
+router.get('/getUserStatus', auth, dashboardController.getUserStatus)
+
 module.exports = router;

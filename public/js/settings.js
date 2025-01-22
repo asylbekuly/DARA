@@ -20,10 +20,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     loadUserProfile();
+    getUserStatus();
 
     document.querySelector('#changepassword').addEventListener('click', (e) => {
         e.preventDefault();
         changePass();
+    });
+
+    document.querySelector('#changeFullname').addEventListener('click', (e) => {
+        e.preventDefault();
+        changeFullname();
     });
 
     document.querySelector('#goBack').addEventListener('click', (e) => {
@@ -43,6 +49,29 @@ function handleLogout(e) {
     window.location.href = './login';
 }
 
+async function getUserStatus() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/dashboard/getUserStatus`, {
+            headers: {
+                'x-auth-token': localStorage.getItem('token')
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            const who = data.who;
+            const add_doctor = document.getElementById('add_doctor')
+            if (who !== 'admin') {
+                add_doctor.style.display = "none"
+            }
+        } else {
+            showErrorPopup(`Error: ${data.message}`);
+        }
+    } catch (error) {
+        console.error('Error', error);
+    }
+}
 
 async function loadUserProfile() {
     try {
@@ -91,6 +120,29 @@ async function changePass() {
         }
     } catch (error) {
         console.error('Error changing password:', error);
+    }
+}
+
+
+async function changeFullname() {
+    const newFullname = document.getElementById('fullname_change').value;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/settings/change_fullname`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-auth-token': localStorage.getItem('token')
+            },
+            body: JSON.stringify({ newFullname: newFullname })
+        });
+        if (response.ok) {
+            showSuccessPopup('Name changed successfully');
+        } else {
+            showErrorPopup('Failed to change name');
+        }
+    } catch (error) {
+        console.error('Error changing name  :', error);
     }
 }
 

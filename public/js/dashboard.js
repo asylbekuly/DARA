@@ -49,9 +49,34 @@ async function initializeDashboardPanel() {
     await loadCards();
     await loadCardsTable();
     await loadDoctorsTable();
+    await getUserStatus();
   } catch (error) {
     console.error('Failed to initialize dashboard panel:', error);
     showErrorPopup('Failed to load dashboard panel. Please refresh the page.');
+  }
+}
+
+async function getUserStatus() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/dashboard/getUserStatus`, {
+      headers: {
+        'x-auth-token': localStorage.getItem('token')
+      }
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      const who = data.who;
+      const add_doctor = document.getElementById('add_doctor')
+      if(who !== 'admin'){
+        add_doctor.style.display="none"
+      }
+    } else {
+      showErrorPopup(`Error: ${data.message}`);
+    }
+  } catch (error) {
+    console.error('Error', error);
   }
 }
 
@@ -153,7 +178,7 @@ function getStatusClass(status) {
   }
 }
 
-async function loadDoctorsTable(){
+async function loadDoctorsTable() {
   try {
     const response = await fetch(`${API_BASE_URL}/api/dashboard/doctors`, {
       headers: {

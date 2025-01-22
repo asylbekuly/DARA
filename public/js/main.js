@@ -17,25 +17,25 @@ let isLoading = false;
 let initialized = false;
 
 function showErrorPopup(message) {
-	const popup = document.createElement('div')
-	popup.classList.add('error-popup')
-	popup.textContent = message
-	document.body.appendChild(popup)
+  const popup = document.createElement('div')
+  popup.classList.add('error-popup')
+  popup.textContent = message
+  document.body.appendChild(popup)
 
-	setTimeout(() => {
-			popup.remove()
-	}, 3000)
+  setTimeout(() => {
+    popup.remove()
+  }, 3000)
 }
 
 function showSuccessPopup(message) {
-	const popup = document.createElement('div')
-	popup.classList.add('success-popup')
-	popup.textContent = message
-	document.body.appendChild(popup)
+  const popup = document.createElement('div')
+  popup.classList.add('success-popup')
+  popup.textContent = message
+  document.body.appendChild(popup)
 
-	setTimeout(() => {
-			popup.remove()
-	}, 3000)
+  setTimeout(() => {
+    popup.remove()
+  }, 3000)
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   $(document).ready(() => {
     initializeAdminPanel();
+    getUserStatus();
   });
 
   $('.selectpicker').selectpicker({
@@ -81,6 +82,29 @@ function initializeEventListeners() {
   }
 }
 
+async function getUserStatus() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/dashboard/getUserStatus`, {
+      headers: {
+        'x-auth-token': localStorage.getItem('token')
+      }
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      const who = data.who;
+      const add_doctor = document.getElementById('add_doctor')
+      if (who !== 'admin') {
+        add_doctor.style.display = "none"
+      }
+    } else {
+      showErrorPopup(`Error: ${data.message}`);
+    }
+  } catch (error) {
+    console.error('Error', error);
+  }
+}
 // Handle course submission
 async function handleCardSubmit(e) {
   e.preventDefault();

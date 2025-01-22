@@ -10,5 +10,6 @@ router.get('/profile', auth, settingsController.getUser);
 // Change password
 router.post('/change_password', auth, settingsController.changePass);
 
+router.post('/change_fullname', auth, settingsController.changeFullname);
 
 module.exports = router;

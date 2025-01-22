@@ -108,6 +108,9 @@ app.use((req, res) => {
     res.status(404).json({ msg: 'Not Found' });
 });
 
+app.get('/config', (req, res) => {
+    res.json({ API_BASE_URL: process.env.API_BASE_URL });
+  });
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('MongoDB connected'))

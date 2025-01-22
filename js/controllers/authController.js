@@ -25,7 +25,7 @@ exports.register = async (req, res) => {
     console.log('Creating new user:', user);
     if (enable2FA) {
       const secret = speakeasy.generateSecret({
-        name: `EduPlatform:${email}`
+        name: `DARA:${email}`
       });
       user.tempSecret = secret.base32;
 

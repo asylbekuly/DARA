@@ -35,3 +35,15 @@ exports.getAllDoctor = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 }
+
+exports.getUserStatus = async (req, res) => {
+  try {
+    const user = req.user
+
+    const who = user.who;
+
+    res.json({ success: true, who: who });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+}
