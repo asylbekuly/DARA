@@ -13,4 +13,6 @@ const checkAdmin = (req, res, next) => {
 
 router.post('/addDoctor', auth, checkAdmin, doctorController.addDoctor);
 
+router.post('/addStatus', auth, checkAdmin, doctorController.addStatus);
+
 module.exports = router;

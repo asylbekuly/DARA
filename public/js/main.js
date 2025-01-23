@@ -46,8 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   $(document).ready(() => {
-    getUserStatus();
     initializeAdminPanel();
+    getUserStatus();
   });
 
   $('.selectpicker').selectpicker({
@@ -82,6 +82,8 @@ function initializeEventListeners() {
   }
 }
 
+let userStatus = ''
+
 async function getUserStatus() {
   try {
     const response = await fetch(`${API_BASE_URL}/api/dashboard/getUserStatus`, {
@@ -95,8 +97,11 @@ async function getUserStatus() {
     if (data.success) {
       const who = data.who;
       const add_doctor = document.getElementById('add_doctor')
+      const addCard = document.getElementById('showCardPopup')
+      userStatus = who
       if (who !== 'admin') {
         add_doctor.style.display = "none"
+        addCard.style.display = "none"
       }
     } else {
       showErrorPopup(`Error: ${data.message}`);
@@ -234,14 +239,36 @@ async function loadCardsTable() {
         newCard.setAttribute('id', card._id);
         newCard.classList.add('kanban-card');
 
-        newCard.innerHTML = `
+        if (userStatus === 'admin') {
+          newCard.innerHTML = `
                   <p>Full Name: ${sanitizeHTML(card.fullName)}</p>
                   <p>Patient ID: ${sanitizeHTML(card.patient_id)}</p>
                   <p>Doctor: ${sanitizeHTML(card.doctor)}</p>
                   <p>Appointment Date: ${formatDate(card.appoinment_date)}</p>
-                  <button class="btn btn-sm btn-warning edit-btn">Edit</button>
-                  <button class="btn btn-sm btn-danger delete-btn">Delete</button>
+                  <button class="btn_admin btn btn-sm btn-warning edit-btn">Edit</button>
+                  <button class="btn_admin btn btn-sm btn-danger delete-btn">Delete</button>
               `;
+
+          const edt = newCard.querySelector('.edit-btn');
+          const delBtn = newCard.querySelector('.delete-btn');
+
+          edt.addEventListener('click', () => {
+            editCard(card._id);
+          });
+
+          delBtn.addEventListener('click', () => {
+            deleteCard(card._id)
+          });
+        } else if (userStatus === 'doctor') {
+          newCard.innerHTML = `
+                  <p>Full Name: ${sanitizeHTML(card.fullName)}</p>
+                  <p>Patient ID: ${sanitizeHTML(card.patient_id)}</p>
+                  <p>Doctor: ${sanitizeHTML(card.doctor)}</p>
+                  <p>Appointment Date: ${formatDate(card.appoinment_date)}</p>
+              `;
+        }
+
+
 
         newCard.addEventListener('dragstart', handleDragStart);
 
@@ -252,19 +279,6 @@ async function loadCardsTable() {
         } else if (card.status === "done") {
           cardsTableBody3.appendChild(newCard);
         }
-
-
-        // Initialize tooltip
-        const edt = newCard.querySelector('.edit-btn');
-        const delBtn = newCard.querySelector('.delete-btn');
-
-        edt.addEventListener('click', () => {
-          editCard(card._id);
-        });
-
-        delBtn.addEventListener('click', () => {
-          deleteCard(card._id)
-        });
       });
     }
   } catch (error) {

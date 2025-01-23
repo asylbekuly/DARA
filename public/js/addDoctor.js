@@ -4,6 +4,8 @@ const API_BASE_URL = '';
 document.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.querySelector('#login__form')
   const logoutBtn = document.querySelector('.logout');
+
+  const statusForm = document.querySelector('#status__form')
   if (logoutBtn) {
     logoutBtn.addEventListener('click', handleLogout);
   }
@@ -29,6 +31,34 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         showErrorPopup(data.message)
         console.error('Not added', data.message)
+      }
+    } catch (error) {
+      console.error('Error:', error)
+      showErrorPopup('An unexpected error occurred.')
+    }
+  })
+
+  statusForm.addEventListener('submit', async (event) => {
+    event.preventDefault()
+
+    const email = document.getElementById('statusInput').value
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/doctor/addStatus`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-token': localStorage.getItem('token')
+        },
+        body: JSON.stringify({ email })
+      })
+
+      const data = await response.json()
+      if (response.ok) {
+        showSuccessPopup('Status changed successfully')
+        document.getElementById('statusInput').value = ' '
+      } else {
+        showErrorPopup(data.message)
+        console.error('Not changed', data.message)
       }
     } catch (error) {
       console.error('Error:', error)
