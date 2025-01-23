@@ -46,10 +46,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function initializeDashboardPanel() {
   try {
+    await getUserStatus();
     await loadCards();
     await loadCardsTable();
     await loadDoctorsTable();
-    await getUserStatus();
   } catch (error) {
     console.error('Failed to initialize dashboard panel:', error);
     showErrorPopup('Failed to load dashboard panel. Please refresh the page.');

@@ -46,8 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   $(document).ready(() => {
-    initializeAdminPanel();
     getUserStatus();
+    initializeAdminPanel();
   });
 
   $('.selectpicker').selectpicker({

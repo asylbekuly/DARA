@@ -21,6 +21,10 @@ exports.register = async (req, res) => {
       return res.status(400).json({ msg: 'User already exists' });
     }
 
+    if(!email || !password || !fullname || !profession){
+      return res.status(400).json({ msg: 'Please include all fields' });
+    }
+
     user = new User({ email, password, fullname, profession });
     console.log('Creating new user:', user);
     if (enable2FA) {

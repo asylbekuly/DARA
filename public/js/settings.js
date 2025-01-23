@@ -19,8 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(`${label} is now ${isChecked ? "enabled" : "disabled"}`);
     });
 
-    loadUserProfile();
     getUserStatus();
+    loadUserProfile();
 
     document.querySelector('#changepassword').addEventListener('click', (e) => {
         e.preventDefault();
