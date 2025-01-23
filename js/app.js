@@ -37,6 +37,31 @@ app.options('*', cors());
 // Serve static files
 app.use(express.static(path.join(__dirname, '../public')));
 
+let dbConnected = false;
+
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => {
+        console.log('MongoDB connected');
+        dbConnected = true;
+    })
+    .catch(err => {
+        dbConnected = false;
+    });
+
+
+app.use((req, res, next) => {
+    if (!dbConnected) {
+        if (req.accepts('html')) {
+            res.status(404).sendFile(path.join(__dirname, '../public/DBError.html'));
+            return;
+        }
+        res.status(404).json({ msg: 'Not Found' });
+        return;
+    }
+    next(); // Proceed to the next middleware/route if DB is connected
+});
+
+
 app.get('/register', (req, res) => {
     res.sendFile(path.join(__dirname, '../public', 'register.html'));
 });
@@ -71,31 +96,6 @@ app.use('/api/main', cardRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/doctor', doctorRoutes);
 app.use('/api/dashboard', dashboardRoutes);
-
-let dbConnected = false;
-
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => {
-        console.log('MongoDB connected');
-        dbConnected = true;
-    })
-    .catch(err => {
-        dbConnected = false;
-    });
-
-
-app.use((req, res, next) => {
-    if (!dbConnected) {
-        if (req.accepts('html')) {
-            res.status(404).sendFile(path.join(__dirname, '../public/404.html'));
-            return;
-        }
-        res.status(404).json({ msg: 'Not Found' });
-        return;
-    }
-    next(); // Proceed to the next middleware/route if DB is connected
-});
-
 
 // Redirect middleware
 app.use((req, res, next) => {
