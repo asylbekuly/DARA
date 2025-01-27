@@ -37,6 +37,8 @@ app.options('*', cors());
 // Serve static files
 app.use(express.static(path.join(__dirname, '../public')));
 
+
+// DB middleware
 let dbConnected = false;
 
 mongoose.connect(process.env.MONGO_URI)
@@ -58,10 +60,11 @@ app.use((req, res, next) => {
         res.status(404).json({ msg: 'Not Found' });
         return;
     }
-    next(); // Proceed to the next middleware/route if DB is connected
+    next();
 });
 
 
+// Routes
 app.get('/register', (req, res) => {
     res.sendFile(path.join(__dirname, '../public', 'register.html'));
 });
